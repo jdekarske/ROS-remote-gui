@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Remote Experiment</title>
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+
+  <script type="text/javascript"
+    src="http://static.robotwebtools.org/EventEmitter2/current/eventemitter2.min.js"></script>
+  <script type="text/javascript" src="http://static.robotwebtools.org/roslibjs/current/roslib.min.js"></script>
+  <script src="index.js"></script>
+
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <h1 style='margin: auto;'>Experiment camera!</h1>
+    </div>
+    <div class="row">
+      <img id="camera_stream" style='margin: auto;' src="img/ur5e.png">
+    </div>
+    <hr/>
+    <div class="row">
+      <button style='margin: auto;' type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+        Settings
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Spawn Cubes</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group row">
+              <label for="xcubes" class="col-sm-3 col-form-label">xcubes</label>
+              <div class="col-sm-9">
+                <input type="number" class="form-control" id="xcubes" min="0" max="6" placeholder="width">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="ycubes" class="col-sm-3 col-form-label">ycubes</label>
+              <div class="col-sm-9">
+                <input type="number" class="form-control" id="ycubes" min="0" max="6" placeholder="length">
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-sm-3"></div>
+              <div class="col-sm-9">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="overwrite">
+                  <label class="form-check-label" for="overwrite">Replace?</label>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick="spawnService();">Spawn</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+    integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+    integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>
