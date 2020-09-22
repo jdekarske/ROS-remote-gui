@@ -30,6 +30,61 @@ camera_topic.subscribe(function (message) {
     document.getElementById('camera_stream').src = "data:image/jpg;base64," + message.data;
 });
 
+function filterItems(arr, query) {
+    return arr.filter(function (el) {
+        return el.toLowerCase().indexOf(query.toLowerCase()) !== -1
+    })
+}
+
+// https://stackoverflow.com/questions/22395357/how-to-compare-two-arrays-are-equal-using-javascript
+function arraysAreIdentical(arr1, arr2) {
+    if (arr1.length !== arr2.length) return false;
+    for (var i = 0, len = arr1.length; i < len; i++) {
+        if (arr1[i] !== arr2[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+
+var cubes = [];
+
+var cubes_topic = new ROSLIB.Topic({
+    ros: ros,
+    name: '/gazebo/model_states',
+    messageType: 'gazebo_msgs/ModelStates'
+});
+
+function chooseCube(cube_str) {
+    console.log(cube_str);
+}
+
+function updatePick(arr) {
+    var drop = document.getElementById('select_pick');
+    //remove options
+    while (drop.firstChild) {
+        drop.removeChild(drop.lastChild);
+    }
+    //add options
+    for (var i = 0; i < arr.length; i++) {
+        var opt = arr[i];
+        var el = document.createElement("a");
+        el.className = "dropdown-item";
+        el.textContent = opt;
+        el.href = "#";
+        drop.appendChild(el);
+    }
+}
+
+cubes_topic.subscribe(function (message) {
+    var newcubes = filterItems(message.name, 'cube_');
+    if (!arraysAreIdentical(newcubes, cubes)) {
+        cubes = newcubes;
+        updatePick(cubes);
+    }
+
+});
+
 // Calling a service
 // -----------------
 
