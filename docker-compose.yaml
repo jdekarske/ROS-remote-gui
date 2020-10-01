@@ -1,0 +1,13 @@
+version: '2'
+services:
+  simulator:
+    image: jdekarske/homestri-remote-experiment:latest
+    command: /bin/bash -c "source /catkin_ws/docker-entrypoint.sh && roslaunch experiment_world main_experiment.launch gazebo_gui:=false rviz_gui:=false"
+    ports:
+      - 9090:9090
+  web:
+    image: nginx
+    volumes:
+      - $PWD:/usr/share/nginx/html:ro
+    ports:
+      - "8080:80"
