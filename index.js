@@ -1,9 +1,11 @@
 // Connecting to ROS
 // -----------------
 
-var ros = new ROSLIB.Ros({
-    url: 'ws://localhost:9090' //TODO: make this DDNS
-});
+var remote_url= 'ws://placeholder.duckdns.org:9090'
+var local_url= 'ws://localhost:9090'
+var ros = new ROSLIB.Ros();
+
+var url = remote_url;
 
 ros.on('connection', function () {
     console.log('Connection to websocket!');
@@ -11,11 +13,17 @@ ros.on('connection', function () {
 
 ros.on('error', function (error) {
     console.log('Error connecting to websocket server: ', error);
+    if(url===remote_url){
+        url = local_url;
+        ros.connect(url);
+    }
 });
 
 ros.on('close', function () {
     console.log('Connection to websocket server closed.');
 });
+
+ros.connect(url);
 
 // Subscribing to a Topic
 // ----------------------
@@ -60,20 +68,22 @@ function chooseCube(cube_str) {
 }
 
 function updatePick(arr) {
-    var drop = document.getElementById('select_pick');
-    //remove options
-    while (drop.firstChild) {
-        drop.removeChild(drop.lastChild);
-    }
-    //add options
-    for (var i = 0; i < arr.length; i++) {
-        var opt = arr[i];
-        var el = document.createElement("a");
-        el.className = "dropdown-item";
-        el.textContent = opt;
-        el.href = "#";
-        drop.appendChild(el);
-    }
+    var drop = [document.getElementById('select_pick'), document.getElementById('select_place')];
+    drop.forEach(function (_value, _index, _array) {
+        //remove options
+        while (_value.firstChild) {
+            _value.removeChild(_value.lastChild);
+        }
+        //add options
+        for (var i = 0; i < arr.length; i++) {
+            var opt = arr[i];
+            var el = document.createElement("option");
+            el.textContent = opt;
+            _value.appendChild(el);
+        }
+    })
+    $("#select_pick").selectpicker('refresh');
+    $("#select_place").selectpicker('refresh');
 }
 
 cubes_topic.subscribe(function (message) {
@@ -105,6 +115,26 @@ function spawnService() {
     console.log(document.getElementById('overwrite').value);
 
     spawnCubesClient.callService(request, function (result) {
+        console.log('Result for service call on '
+            + spawnCubesClient.name
+            + ': '
+            + result.status);
+    });
+}
+
+var goPickPlaceClient = new ROSLIB.Service({
+    ros: ros,
+    name: '/pick_place',
+    serviceType: 'targetpose/pickplace'
+});
+
+function goPickPlace() {
+    var request = new ROSLIB.ServiceRequest({
+        pick_object: document.getElementById('select_pick').value,
+        place_object: document.getElementById('select_place').value
+    });
+
+    goPickPlaceClient.callService(request, function (result) {
         console.log('Result for service call on '
             + spawnCubesClient.name
             + ': '
